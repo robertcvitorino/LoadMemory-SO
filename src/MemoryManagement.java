@@ -5,11 +5,21 @@ import java.io.IOException;
 
 public class MemoryManagement {
     public static int getPageNumber(int address, int pageSize) {
+        // calcula os bits do tamanho da página
+        int numberOfPageBits = (int) (Math.log(pageSize) / Math.log(2));
 
-        int mask = (1 << (int)(Math.log(pageSize) / Math.log(2))) - 1;
+        //máscara dos  bits menos significativos
+        int mask = (1 << numberOfPageBits) - 1;
 
-        return (address >> (int)(Math.log(pageSize) / Math.log(2))) & mask;
+        // desloca para a direita para encontrat  o número da página
+        int pageNumber = address >> numberOfPageBits;
+
+        // bit relevantes
+        int pageNumberWithMask = pageNumber & mask;
+
+        return pageNumberWithMask;
     }
+
 
     public static int getOffset(int address, int pageSize) {
         return address & (pageSize - 1);
